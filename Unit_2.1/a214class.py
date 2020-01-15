@@ -1,19 +1,23 @@
 import tkinter as tk
 import string
+from passlib.hash import pbkdf2_sha256
 
 root = tk.Tk()
 
+users = {}
+
 def login():
+    pass
+
+def sign_up():
     if password_validation(password_entry.get()):
-        print('You have entered a valid Password!')
+        result_lbl.config(text='You have entered a valid password!')
     else:
-        print("Invalid Password attempt, please retry.")
-
-
-
+        result_lbl.config(text="Invalid Password attempt, please retry.")
+    users[username_entry.get()] = password_entry.get()  
 
 def password_validation(entered_password):
-    if len(entered_password) <= 7:
+    if len(entered_password) < 8:
         return False
     elif not any(char.isupper() for char in entered_password):
         return False
@@ -26,6 +30,8 @@ def password_validation(entered_password):
     else:
         return True  
 
+def encrypting_passwords():
+    hash = pbkdf2_sha256.hash()
 
 root.wm_geometry("800x600")
 
@@ -43,9 +49,12 @@ password_entry = tk.Entry(root, show='*')
 password_entry.pack(pady=5)
 
 submit = tk.Button(root, text='Login', command=login)
-submit.pack()
+submit.pack(pady=10)
 
-signup_btn = tk.Button(root, text='Sign up', command=pass)
-signup_btn.pack()
+signup_btn = tk.Button(root, text='Sign up', command=sign_up)
+signup_btn.pack(pady=10)
+
+result_lbl = tk.Label(root, text='Result Label')
+result_lbl.pack(pady=20)
 
 root.mainloop()
